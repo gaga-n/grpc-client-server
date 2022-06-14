@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option java_package = "org.example.proto";
+option java_multiple_files = true;
+
+/*
+this is a person
+ */
+// this is a person
+message Person {
+  int32 id =  1;
+  string first_name = 2;
+  repeated string phone_numbers = 3;
+  Region birth_place_region = 4;
+  Date date_of_birth = 5;
+}
+
+enum Region {
+  UNKNOWN_REGION = 0;
+  NORTH_REGION = 1;
+  SOUTH_REGION = 2;
+  EAST_REGION = 3;
+  WEST_REGION = 4;
+}
+
+message Date {
+  int32 day = 1;
+  int32 month = 2;
+  int32 year = 3;
+}
+
+// request
+message PersonIdRequest {
+  int32 id = 1;
+}
+
+//response
+message PersonResponse {
+  Person person = 1;
+}
+
+message PersonNameRequest {
+  string name = 1;
+}
+
+service PersonService {
+  rpc FindPersonWithId (PersonIdRequest) returns (PersonResponse);
+  rpc FindLexicographicallySmallestPerson (stream PersonIdRequest) returns (PersonResponse);
+  rpc FindPersonWithName (PersonNameRequest) returns (stream PersonResponse);
+  rpc FindStreamingPerson (stream PersonIdRequest) returns (stream PersonResponse);
+}
